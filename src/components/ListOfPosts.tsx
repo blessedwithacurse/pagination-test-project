@@ -45,23 +45,22 @@ export default function ListOfPosts() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const { isPending, error, data } = useQuery({
     queryKey: ["posts"],
-    queryFn: fetchPosts,
-  });
-  const currentTableData = React.useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
-    const lastPageIndex = firstPageIndex + PAGE_SIZE;
-    return data?.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+    queryFn: fetchPosts
+  })
+
+  const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
+  const lastPageIndex = firstPageIndex + PAGE_SIZE
+  const currentPostsData =  data?.slice(firstPageIndex, lastPageIndex)
 
   if (isPending) return "Loading...";
 
-  if (error) return "An error has occurred: " + error.message;
- 
+  if (error) return "An error has occurred: " + error.message
+  
   return (
     <>
       <Title>Posts</Title>
       <List>
-        {currentTableData?.map((post) => (
+        {currentPostsData?.map((post) => (
           <ListItem key={post.id}>
             <Link className="list-item" to={`/post/${post.id}`}>
               {post.title}
